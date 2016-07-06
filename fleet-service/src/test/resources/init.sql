@@ -1,7 +1,7 @@
-DROP DATABASE IF EXISTS fleet_dev_supeng;
-CREATE DATABASE fleet_dev_supeng
+DROP DATABASE IF EXISTS fleet_study;
+CREATE DATABASE fleet_study
   CHARACTER SET utf8;
-USE fleet_dev_supeng;
+USE fleet_study;
 
 # DROP DATABASE IF EXISTS fleet;
 # CREATE DATABASE fleet

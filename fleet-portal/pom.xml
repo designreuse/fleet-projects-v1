@@ -74,9 +74,9 @@
                     </webApp>
 
                     <stopKey>shutdown</stopKey><!--stopKey 可选。用于和stopPort联合使用，用于停止jetty。运行stop或者run-forked目标时使用。-->
-                    <stopPort>9999</stopPort><!--stopPort 可选。端口用于监听停止命令。运行stop或者run-forked目标时使用。-->
+                    <stopPort>9090</stopPort><!--stopPort 可选。端口用于监听停止命令。运行stop或者run-forked目标时使用。-->
                     <httpConnector><!--端口配置 -->
-                        <port>8888</port>
+                        <port>8080</port>
                     </httpConnector>
                 </configuration>
             </plugin>

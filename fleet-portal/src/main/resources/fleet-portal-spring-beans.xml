@@ -26,7 +26,7 @@
     <bean id="cronTrigger_SystemGeneratesTasksJob" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="jobDetail_SystemGeneratesTasksJob"/>
         <!--CronTrigger配置完整格式为： [秒] [分] [小时] [日] [月] [周] [年] -->
-        <property name="cronExpression" value="0 0/5 * * * ?"/>
+        <property name="cronExpression" value="0 0/10 * * * ?"/>
     </bean>
 
 
@@ -39,7 +39,7 @@
     <bean id="cronTrigger_TestMonitorAllDriverLatLngJob" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="jobDetail_TestMonitorAllDriverLatLngJob"/>
         <!--CronTrigger配置完整格式为： [秒] [分] [小时] [日] [月] [周] [年] -->
-        <property name="cronExpression" value="0/3 * * * * ?"/>
+        <property name="cronExpression" value="0/10 * * * * ?"/>
     </bean>
 
 
@@ -52,7 +52,7 @@
     <bean id="cronTrigger_TestMonitorLatLngDriverJob" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="jobDetail_TestMonitorLatLngDriverJob"/>
         <!--CronTrigger配置完整格式为： [秒] [分] [小时] [日] [月] [周] [年] -->
-        <property name="cronExpression" value="0/3 * * * * ?"/>
+        <property name="cronExpression" value="0/10 * * * * ?"/>
     </bean>
 
 
