@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.comodin.fleet.core.mapper.ClientBranchBeanMapper" >
+    <resultMap id="BaseResultMap" type="com.comodin.fleet.core.bean.ClientBranchBean" >
+        <!--
+          WARNING - @mbggenerated
+        -->
+        <id column="branch_id" property="id" jdbcType="INTEGER" />
+        <result column="branch_name" property="name" jdbcType="VARCHAR" />
+        <result column="branch_type" property="type" jdbcType="VARCHAR" />
+        <result column="branch_client_id" property="clientId" jdbcType="INTEGER" />
+        <result column="branch_client_name" property="clientName" jdbcType="VARCHAR" />
+        <result column="branch_contact" property="contact" jdbcType="VARCHAR" />
+        <result column="branch_phone" property="phone" jdbcType="VARCHAR" />
+        <result column="branch_address" property="address" jdbcType="VARCHAR" />
+        <result column="branch_latitude" property="latitude" jdbcType="VARCHAR" />
+        <result column="branch_longitude" property="longitude" jdbcType="VARCHAR" />
+        <result column="branch_window_start_time" property="windowStartTime" jdbcType="TIME" />
+        <result column="branch_window_end_time" property="windowEndTime" jdbcType="TIME" />
+        <result column="branch_window_duration" property="windowDuration" jdbcType="TIME" />
+        <result column="branch_cron_expression" property="cronExpression" jdbcType="VARCHAR" />
+        <result column="branch_key_code" property="keyCode" jdbcType="VARCHAR" />
+        <result column="branch_keychain_id" property="keychainId" jdbcType="INTEGER" />
+        <result column="branch_keychain_name" property="keychainName" jdbcType="VARCHAR" />
+        <result column="branch_status" property="status" jdbcType="CHAR" />
+        <result column="branch_create_date_time" property="createDateTime" jdbcType="TIMESTAMP" />
+        <result column="branch_delete_flag" property="deleteFlag" jdbcType="CHAR" />
+    </resultMap>
+
+
+    <delete id="batchDeleteByPrimaryKeys">
+        DELETE FROM t_client_branch WHERE branch_id IN
+        <foreach close=")" collection="array" index="primarykeys" item="item" open="(" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+
+    <delete id="batchDeleteFlagByPrimaryKeys">
+        UPDATE t_client_branch SET branch_delete_flag='Remove' WHERE branch_id IN
+        <foreach close=")" collection="array" index="primarykeys" item="item" open="(" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+</mapper>

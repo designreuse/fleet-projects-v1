@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd
+        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.2.xsd">
+
+    <!-- 启用spring mvc 注解-->
+    <mvc:annotation-driven validator="validator"/>
+    <!-- 注解扫描包 -->
+    <context:component-scan base-package="com.comodin.fleet" use-default-filters="false">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+        <context:include-filter type="annotation" expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
+    </context:component-scan>
+
+    <!-- 对静态资源文件的访问 不支持访问WEB-INF目录 -->
+    <mvc:default-servlet-handler/>
+    <!-- 对静态资源文件的访问 支持访问WEB-INF目录 -->
+    <mvc:resources mapping="/resources/**" location="/resources/"/>
+    <mvc:resources mapping="/template/**" location="/WEB-INF/jsp/template/"/>
+
+
+    <!-- 定义：视图解析器 -->
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/jsp/"/>
+        <property name="suffix" value=".jsp"/>
+        <property name="contentType" value="text/html; charset=UTF-8"/>
+    </bean>
+
+    <!--配置拦截器 多个拦截器，顺序执行-->
+    <mvc:interceptors>
+        <!--<mvc:interceptor>&lt;!&ndash;记录audit日志&ndash;&gt;-->
+            <!--<mvc:mapping path="/**"/>-->
+            <!--<mvc:exclude-mapping path="/resources/**"/>-->
+            <!--<bean class="com.comodin.fleet.portal.interceptor.AuditLogInterceptor"/>-->
+        <!--</mvc:interceptor>-->
+        <!--<mvc:interceptor>&lt;!&ndash;登陆认证拦截器&ndash;&gt;-->
+            <!--<mvc:mapping path="/**"/>-->
+            <!--<mvc:exclude-mapping path="/userLogin.php"/>-->
+            <!--<mvc:exclude-mapping path="/resources/**"/>-->
+            <!--<bean class="com.comodin.fleet.portal.interceptor.LoginInterceptor"/>-->
+        <!--</mvc:interceptor>-->
+
+        <!--配置拦截器（不）作用的路径-->
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <mvc:exclude-mapping path="/userLogin.php"/>
+            <mvc:exclude-mapping path="/resources/**"/>
+
+            <!--配置自定义的拦截器-->
+            <bean class="com.comodin.fleet.portal.interceptor.DefaultInterceptor"/>
+        </mvc:interceptor>
+
+    </mvc:interceptors>
+
+
+    <!--配置国际化 资源文件-->
+    <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+        <property name="basenames">
+            <list>
+                <value>i18n</value>
+            </list>
+        </property>
+        <property name="defaultEncoding" value="utf-8"/>
+        <property name="cacheSeconds" value="120"/>
+    </bean>
+    <!--校验器-->
+    <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+        <property name="providerClass" value="org.hibernate.validator.HibernateValidator"/>
+        <property name="validationMessageSource" ref="messageSource"/>
+    </bean>
+
+
+</beans>

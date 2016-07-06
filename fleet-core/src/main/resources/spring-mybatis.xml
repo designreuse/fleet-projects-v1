@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.2.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.2.xsd">
+
+    <import resource="classpath:config/jdbc-pool/spring-jdbc-pool-druid.xml"/>
+
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="mapperLocations">
+            <array>
+                <value>classpath:sqlmapper/*.xml</value>
+            </array>
+        </property>
+        <property name="typeAliasesPackage" value="com.comodin.fleet.core.bean"/>
+        <property name="plugins">
+            <array>
+                <bean class="com.github.pagehelper.PageHelper">
+                    <property name="properties">
+                        <value>
+
+                            dialect=mysql
+                            <!--dialect 增加dialect属性，使用时可以指定该属性（不指定的情况下，分页插件会自动判断），可选值为oracle,mysql,mariadb,sqlite,hsqldb,postgresql,db2,sqlserver,informix,h2,sqlserver2012。-->
+
+                            offsetAsPageNum=false
+                            <!--offsetAsPageNum 该参数默认为 false 设置为true时，会将RowBounds第一个参数offset当成pageNum页码使用，和startPage中的pageNum效果一样
+                                增加offsetAsPageNum属性，默认值为false，使用默认值时不需要增加该配置，需要设为true时，需要配置该参数。当该参数设置为true时，使用RowBounds分页时，会将offset参数当成pageNum使用，可以用页码和页面大小两个参数进行分页。-->
+
+                            reasonable=false
+                            <!--reasonable 3.3.0版本可用 - 分页参数合理化，默认 false 禁用；
+                                            启用合理化时，如果pageNum<1会查询第一页，如果pageNum>pages会查询最后一页；
+                                            禁用合理化时，如果pageNum<1或pageNum>pages会返回空数据-
+                                            reasonable参数说明
+                                                如果你配置了该参数为true，那么如果你的数据一共有12条，当你查询PageHelper.startPage(7,5)的时候。
+                                                以mysql为例，你认为应该是limit 35,5，实际上是limit 10,5，为什么会这样呢？
+                                                因为你只有12条数据，每页5条的时候不可能存在第7页，只有3页，所以参数会自动变为startPage(3,5)，查询最后一页的结果。
+                                                所以如果你使用了合理化，你就要知道为什么会这样，否则就不要配置reasonable（默认false）。-->
+
+                            <!--offsetAsPageNum 该参数默认为false 设置为true时，使用RowBounds分页会进行count查询
+                                false=====》Page{count=false, pageNum=1, pageSize=10, startRow=0, endRow=10, total=-1, pages=1, countSignal=false, orderBy='null', orderByOnly=false, reasonable=false, pageSizeZero=false}
+                                true =====》Page{count=true, pageNum=1, pageSize=10, startRow=0, endRow=10, total=162, pages=17, countSignal=false, orderBy='null', orderByOnly=false, reasonable=false, pageSizeZero=false} -->
+                            rowBoundsWithCount=true
+
+                            <!--pageSizeZero 设置为 true 时，如果pageSize=0或者RowBounds.limit = 0就会查询出全部的结果（相当于没有执行分页查询，但是返回结果仍然是Page类型）-->
+                            pageSizeZero=false
+
+                            <!--params 3.5.0版本可用 - 为了支持startPage(Object params)方法 增加了一个`params`参数来配置参数映射，用于从Map或ServletRequest中取值
+                                可以配置pageNum,pageSize,count,pageSizeZero,reasonable,orderBy,
+                                不配置映射的用默认值 不理解该含义的前提下，不要随便复制该配置-->
+                            <!--params=pageNum=pageHelperStart;pageSize=pageHelperRows;-->
+
+                            <!-- 支持通过Mapper接口参数来传递分页参数 -->
+                            <!--supportMethodsArguments=false-->
+
+                            <!-- returnPageInfo
+                                用来支持直接返回PageInfo类型，默认值none，可选参数always总是返回PageInfo类型,check检查返回类型是否为PageInfo,none返回Page(List)类型。
+                                用法和配置参考com.github.pagehelper.test.basic包下的PageInfoTest，特别要注意接口的返回值和xml中的resultType类型。-->
+                            returnPageInfo=none
+                        </value>
+                    </property>
+                </bean>
+            </array>
+        </property>
+    </bean>
+
+    <!--配置 mapper 扫描器-->
+    <bean class="tk.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="addToConfig" value="true"/>
+        <property name="basePackage" value="com.comodin.fleet.core.mapper"/>
+        <property name="properties">
+            <value>
+                mappers=com.comodin.fleet.basic.dao.IBaseDao
+            </value>
+        </property>
+    </bean>
+    <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate" scope="prototype">
+        <constructor-arg index="0" ref="sqlSessionFactory"/>
+    </bean>
+
+
+    <!-- 配置Spring的事务管理器 -->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+
+    <!-- 配置 声明式事务 通过AOP来进行事务管理的 设置pointCut表示哪些方法要加入事务处理 通过advisor来确定具体要加入事务控制的方法-->
+    <aop:aspectj-autoproxy/>
+    <aop:config>
+        <aop:pointcut id="appService" expression="execution(* com.comodin.fleet.service.impl.*.*(..))"/>
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="appService"/>
+    </aop:config>
+    <!--拦截器方式配置事务，配置哪些方法要加入事务控制
+                            propagation：    指定事务定义中使用的传播
+                            isolation：      设定事务的隔离级别
+                            timeout：        指定事务的超市（秒）100
+                            readOnly：       指定事务的超时
+                            noRollbackFor：  目标方法可抛出的异常所构成的数组，但通知仍会提交事务java.lang.RuntimeException
+                            rollbackFor：    异常所构成的数组，如果目标方法抛出了这些异常，通知就会回滚事务-->
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="*" propagation="REQUIRED" read-only="true"/>
+            <tx:method name="add*" propagation="REQUIRED"/><!-- 以下方法都是可能设计修改的方法，就无法设置为只读 -->
+            <tx:method name="insert*" propagation="REQUIRED"/>
+            <tx:method name="save*" propagation="REQUIRED"/>
+            <tx:method name="upload*" propagation="REQUIRED"/>
+            <tx:method name="update*" propagation="REQUIRED"/>
+            <tx:method name="modify*" propagation="REQUIRED"/>
+            <tx:method name="edit*" propagation="REQUIRED"/>
+            <tx:method name="delete*" propagation="REQUIRED"/>
+            <tx:method name="remove*" propagation="REQUIRED"/>
+        </tx:attributes>
+    </tx:advice>
+
+</beans>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.comodin.fleet.core.mapper.KeychainBeanMapper" >
+    <resultMap id="BaseResultMap" type="com.comodin.fleet.core.bean.KeychainBean" >
+        <!--
+          WARNING - @mbggenerated
+        -->
+        <id column="keychain_id" property="id" jdbcType="INTEGER" />
+        <result column="keychain_name" property="name" jdbcType="VARCHAR" />
+        <result column="keychain_assign_driver_id" property="assignDriverId" jdbcType="INTEGER" />
+        <result column="keychain_assign_driver_name" property="assignDriverName" jdbcType="VARCHAR" />
+        <result column="keychain_status" property="status" jdbcType="CHAR" />
+        <result column="keychain_create_date_time" property="createDateTime" jdbcType="TIMESTAMP" />
+        <result column="keychain_delete_flag" property="deleteFlag" jdbcType="CHAR" />
+    </resultMap>
+
+    <delete id="batchDeleteByPrimaryKeys">
+        DELETE FROM t_keychain WHERE keychain_id IN
+        <foreach close=")" collection="array" index="primarykeys" item="item" open="(" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+
+    <delete id="batchDeleteFlagByPrimaryKeys">
+        UPDATE t_keychain SET keychain_delete_flag='Remove' WHERE keychain_id IN
+        <foreach close=")" collection="array" index="primarykeys" item="item" open="(" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+</mapper>

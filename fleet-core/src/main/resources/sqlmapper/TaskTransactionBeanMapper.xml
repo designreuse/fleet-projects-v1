@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.comodin.fleet.core.mapper.TaskTransactionBeanMapper" >
+    <resultMap id="BaseResultMap" type="com.comodin.fleet.core.bean.TaskTransactionBean" >
+        <!--
+          WARNING - @mbggenerated
+        -->
+        <id column="transaction_id" property="id" jdbcType="INTEGER" />
+        <result column="transaction_task_id" property="taskId" jdbcType="INTEGER" />
+        <result column="transaction_operator_id" property="operatorId" jdbcType="INTEGER" />
+        <result column="transaction_operator_name" property="operatorName" jdbcType="VARCHAR" />
+        <result column="transaction_operate_type" property="operateType" jdbcType="VARCHAR" />
+        <result column="transaction_operate_comment" property="operateComment" jdbcType="VARCHAR" />
+        <result column="transaction_operate_time" property="operateTime" jdbcType="TIMESTAMP" />
+        <result column="transaction_task_ownev_id" property="taskOwnevId" jdbcType="INTEGER" />
+        <result column="transaction_task_ownev_name" property="taskOwnevName" jdbcType="VARCHAR" />
+        <result column="transaction_task_oeate_time" property="taskOeateTime" jdbcType="TIMESTAMP" />
+        <result column="transaction_delete_flag" property="deleteFlag" jdbcType="CHAR" />
+    </resultMap>
+
+
+    <delete id="batchDeleteByPrimaryKeys">
+        DELETE FROM t_task_transaction WHERE transaction_id IN
+        <foreach close=")" collection="array" index="primarykeys" item="item" open="(" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+
+    <delete id="batchDeleteFlagByPrimaryKeys">
+        UPDATE t_task_transaction SET transaction_delete_flag='Remove' WHERE transaction_id IN
+        <foreach close=")" collection="array" index="primarykeys" item="item" open="(" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+</mapper>

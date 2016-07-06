@@ -1,0 +1,43 @@
+# Windows:
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+*.swp
+
+
+
+# Project build
+bin/
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# eclipse
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+.settings
+.classpath
+.project
+/*/.settings
+/*/.project
+/*/.classpath
+/*/test-output/
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# eclipse
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# Idea
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+.idea/
+target/
+/*/target/
+/*/*.iml
+*.iml
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# Idea
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+/*/jdbc-redis.properties
+/*/jdbc-mysql.properties
+/fleet-api/src/main/webapp/resources/upload/
+fleet-api/src/main/webapp/resources/upload/
+fleet-core/src/main/resources/jdbc-mysql.properties
+fleet-core/src/main/resources/jdbc-redis.properties
+fleet-core/src/test/

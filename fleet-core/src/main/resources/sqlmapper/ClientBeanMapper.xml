@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.comodin.fleet.core.mapper.ClientBeanMapper" >
+    <resultMap id="BaseResultMap" type="com.comodin.fleet.core.bean.ClientBean" >
+        <!--
+          WARNING - @mbggenerated
+        -->
+        <id column="client_id" property="id" jdbcType="INTEGER" />
+        <result column="client_name" property="name" jdbcType="VARCHAR" />
+        <result column="client_phone" property="phone" jdbcType="VARCHAR" />
+        <result column="client_status" property="status" jdbcType="CHAR" />
+        <result column="client_create_date_time" property="createDateTime" jdbcType="TIMESTAMP" />
+        <result column="client_delete_flag" property="deleteFlag" jdbcType="CHAR" />
+    </resultMap>
+
+    <delete id="batchDeleteByPrimaryKeys">
+        DELETE FROM t_client WHERE client_id IN
+        <foreach close=")" collection="array" index="primarykeys" item="item" open="(" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+
+    <delete id="batchDeleteFlagByPrimaryKeys">
+        UPDATE t_client SET client_delete_flag='Remove' WHERE client_id IN
+        <foreach close=")" collection="array" index="primarykeys" item="item" open="(" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+</mapper>

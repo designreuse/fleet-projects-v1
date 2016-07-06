@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+
+    <parent>
+        <groupId>com.comodin.fleet</groupId>
+        <artifactId>fleet-projects</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>fleet-portal</artifactId>
+    <packaging>war</packaging>
+    <name>fleet-portal war</name>
+
+
+    <dependencies>
+
+        <dependency>
+            <groupId>com.comodin.fleet</groupId>
+            <artifactId>fleet-service</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!--Test jar-->
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+        </dependency>
+
+
+        <!--web  jstl taglibs ================================================================================== -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>taglibs</groupId>
+            <artifactId>standard</artifactId>
+        </dependency>
+        <dependency><!--上传文件-->
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+        </dependency>
+        <!--web  jstl taglibs ================================================================================== -->
+        <!--web  servlet jsp =================================================================================== -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet.jsp</groupId>
+            <artifactId>javax.servlet.jsp-api</artifactId>
+        </dependency>
+        <!--web  servlet jsp =================================================================================== -->
+
+
+    </dependencies>
+
+    <build>
+
+        <!--<finalName>${project.artifactId}</finalName>-->
+
+        <plugins>
+
+            <plugin>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-maven-plugin</artifactId>
+                <configuration>
+                    <webApp>
+                        <contextPath>/${project.artifactId}</contextPath>   <!-- 配置项目在容器中的根路径 -->
+                    </webApp>
+
+                    <stopKey>shutdown</stopKey><!--stopKey 可选。用于和stopPort联合使用，用于停止jetty。运行stop或者run-forked目标时使用。-->
+                    <stopPort>9999</stopPort><!--stopPort 可选。端口用于监听停止命令。运行stop或者run-forked目标时使用。-->
+                    <httpConnector><!--端口配置 -->
+                        <port>8888</port>
+                    </httpConnector>
+                </configuration>
+            </plugin>
+
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>tomcat-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+</project>
+

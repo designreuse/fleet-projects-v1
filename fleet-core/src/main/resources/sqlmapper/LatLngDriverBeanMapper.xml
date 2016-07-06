@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.comodin.fleet.core.mapper.LatLngDriverBeanMapper">
+    <resultMap id="BaseResultMap" type="com.comodin.fleet.core.bean.LatLngDriverBean">
+        <!--
+          WARNING - @mbggenerated
+        -->
+        <id column="latlng_id" jdbcType="INTEGER" property="id" />
+        <result column="latlng_driver_username" jdbcType="VARCHAR" property="driverUsername" />
+        <result column="latlng_driver_name" jdbcType="VARCHAR" property="driverName" />
+        <result column="latlng_phone_imei" jdbcType="VARCHAR" property="phoneImei" />
+        <result column="latlng_phone_local_ip" jdbcType="VARCHAR" property="phoneLocalIp" />
+        <result column="latlng_phone_lng" jdbcType="VARCHAR" property="phoneLng" />
+        <result column="latlng_phone_lat" jdbcType="VARCHAR" property="phoneLat" />
+        <result column="latlng_phone_upload_timestamp" jdbcType="TIMESTAMP" property="phoneUploadTimestamp" />
+        <result column="latlng_status" jdbcType="CHAR" property="status" />
+        <result column="latlng_create_date_time" jdbcType="TIMESTAMP" property="createDateTime" />
+        <result column="latlng_delete_flag" jdbcType="CHAR" property="deleteFlag" />
+    </resultMap>
+
+
+    <delete id="batchDeleteByPrimaryKeys">
+        DELETE FROM t_latlng_driver WHERE latlng_id IN
+        <foreach close=")" collection="array" index="primarykeys" item="item" open="(" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+
+    <delete id="batchDeleteFlagByPrimaryKeys">
+        UPDATE t_latlng_driver SET latlng_delete_flag='Remove' WHERE latlng_id IN
+        <foreach close=")" collection="array" index="primarykeys" item="item" open="(" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+
+</mapper>

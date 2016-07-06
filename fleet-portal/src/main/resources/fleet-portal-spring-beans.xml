@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd">
+
+    <!-- 打开Spring的Annotation支持 -->
+    <context:annotation-config/>
+
+    <!-- 扫描注解，除去web层注解，web层注解在mvc配置中扫描 -->
+    <context:component-scan base-package="com.comodin.fleet">
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+        <context:exclude-filter type="annotation" expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
+    </context:component-scan>
+
+    <!--配置：mybatis及事物管理-->
+    <import resource="classpath:spring-mybatis.xml"/>
+
+    <!--定义 系统自动生成任务，JodDetail-->
+    <bean id="jobDetail_SystemGeneratesTasksJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="systemGeneratesTasksJob"/>
+        <property name="targetMethod" value="doIt"/>
+        <property name="concurrent" value="false"/>
+    </bean>
+    <bean id="cronTrigger_SystemGeneratesTasksJob" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="jobDetail_SystemGeneratesTasksJob"/>
+        <!--CronTrigger配置完整格式为： [秒] [分] [小时] [日] [月] [周] [年] -->
+        <property name="cronExpression" value="0 0/5 * * * ?"/>
+    </bean>
+
+
+    <!--定义 系统自动生成任务，JodDetail-->
+    <bean id="jobDetail_TestMonitorAllDriverLatLngJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="testMonitorLatLngDriverAllJob"/>
+        <property name="targetMethod" value="doIt"/>
+        <property name="concurrent" value="false"/>
+    </bean>
+    <bean id="cronTrigger_TestMonitorAllDriverLatLngJob" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="jobDetail_TestMonitorAllDriverLatLngJob"/>
+        <!--CronTrigger配置完整格式为： [秒] [分] [小时] [日] [月] [周] [年] -->
+        <property name="cronExpression" value="0/3 * * * * ?"/>
+    </bean>
+
+
+    <!--定义 系统自动生成任务，JodDetail-->
+    <bean id="jobDetail_TestMonitorLatLngDriverJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="testMonitorLatLngDriverJob"/>
+        <property name="targetMethod" value="doIt"/>
+        <property name="concurrent" value="false"/>
+    </bean>
+    <bean id="cronTrigger_TestMonitorLatLngDriverJob" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="jobDetail_TestMonitorLatLngDriverJob"/>
+        <!--CronTrigger配置完整格式为： [秒] [分] [小时] [日] [月] [周] [年] -->
+        <property name="cronExpression" value="0/3 * * * * ?"/>
+    </bean>
+
+
+    <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="triggers"><!--触发器-->
+            <list>
+                <ref bean="cronTrigger_SystemGeneratesTasksJob"/>
+                <ref bean="cronTrigger_TestMonitorAllDriverLatLngJob"/>
+                <ref bean="cronTrigger_TestMonitorLatLngDriverJob"/>
+            </list>
+        </property>
+    </bean>
+
+</beans>

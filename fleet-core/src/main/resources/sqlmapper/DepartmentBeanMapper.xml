@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.comodin.fleet.core.mapper.DepartmentBeanMapper" >
+    <resultMap id="BaseResultMap" type="com.comodin.fleet.core.bean.DepartmentBean" >
+        <!--
+          WARNING - @mbggenerated
+        -->
+        <id column="department_id" property="id" jdbcType="INTEGER" />
+        <result column="department_name" property="name" jdbcType="VARCHAR" />
+        <result column="department_status" property="status" jdbcType="CHAR" />
+        <result column="department_create_date_time" property="createDateTime" jdbcType="TIMESTAMP" />
+        <result column="department_delete_flag" property="deleteFlag" jdbcType="CHAR" />
+    </resultMap>
+
+    <delete id="batchDeleteByPrimaryKeys">
+        DELETE FROM t_department WHERE department_id IN
+        <foreach close=")" collection="array" index="primarykeys" item="item" open="(" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+
+    <delete id="batchDeleteFlagByPrimaryKeys">
+        UPDATE t_department SET department_delete_flag='Remove' WHERE department_id IN
+        <foreach close=")" collection="array" index="primarykeys" item="item" open="(" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+</mapper>

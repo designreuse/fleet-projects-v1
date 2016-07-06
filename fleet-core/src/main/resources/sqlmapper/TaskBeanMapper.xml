@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.comodin.fleet.core.mapper.TaskBeanMapper" >
+    <resultMap id="BaseResultMap" type="com.comodin.fleet.core.bean.TaskBean" >
+        <!--
+          WARNING - @mbggenerated
+        -->
+        <id column="task_id" property="id" jdbcType="INTEGER" />
+        <result column="task_name" property="name" jdbcType="VARCHAR" />
+        <result column="task_type" property="type" jdbcType="VARCHAR" />
+        <result column="task_execution_date" property="executionDate" jdbcType="DATE" />
+        <result column="task_status" property="status" jdbcType="VARCHAR" />
+        <result column="task_client_id" property="clientId" jdbcType="INTEGER" />
+        <result column="task_client_name" property="clientName" jdbcType="VARCHAR" />
+        <result column="task_client_branch_id" property="clientBranchId" jdbcType="INTEGER" />
+        <result column="task_client_branch_name" property="clientBranchName" jdbcType="VARCHAR" />
+        <result column="task_client_branch_type" property="clientBranchType" jdbcType="VARCHAR" />
+        <result column="task_client_branch_contact" property="clientBranchContact" jdbcType="VARCHAR" />
+        <result column="task_client_branch_phone" property="clientBranchPhone" jdbcType="VARCHAR" />
+        <result column="task_client_branch_address" property="clientBranchAddress" jdbcType="VARCHAR" />
+        <result column="task_client_branch_latitude" property="clientBranchLatitude" jdbcType="VARCHAR" />
+        <result column="task_client_branch_longitude" property="clientBranchLongitude" jdbcType="VARCHAR" />
+        <result column="task_client_branch_window_start_time" property="clientBranchWindowStartTime" jdbcType="TIME" />
+        <result column="task_client_branch_window_end_time" property="clientBranchWindowEndTime" jdbcType="TIME" />
+        <result column="task_client_branch_window_duration" property="clientBranchWindowDuration" jdbcType="TIME" />
+        <result column="task_operator_id" property="operatorId" jdbcType="INTEGER" />
+        <result column="task_operator_name" property="operatorName" jdbcType="VARCHAR" />
+        <result column="task_operate_date_time" property="operateDateTime" jdbcType="TIMESTAMP" />
+        <result column="task_ownev_id" property="ownevId" jdbcType="INTEGER" />
+        <result column="task_ownev_name" property="ownevName" jdbcType="VARCHAR" />
+        <result column="task_driver_id" property="driverId" jdbcType="INTEGER" />
+        <result column="task_driver_name" property="driverName" jdbcType="VARCHAR" />
+        <result column="task_create_date_time" property="createDateTime" jdbcType="TIMESTAMP" />
+        <result column="task_delete_flag" property="deleteFlag" jdbcType="CHAR" />
+    </resultMap>
+
+    <delete id="batchDeleteByPrimaryKeys">
+        DELETE FROM t_task WHERE task_id IN
+        <foreach close=")" collection="array" index="primarykeys" item="item" open="(" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+
+    <delete id="batchDeleteFlagByPrimaryKeys">
+        UPDATE t_task SET task_delete_flag='Remove' WHERE task_id IN
+        <foreach close=")" collection="array" index="primaryKeys" item="item" open="(" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+</mapper>

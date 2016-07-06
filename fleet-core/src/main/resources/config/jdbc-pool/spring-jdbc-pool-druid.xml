@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd">
+
+    <context:property-placeholder
+            location="classpath:jdbc-mysql.properties,classpath:config/jdbc-pool/jdbc-pool-druid.properties"/>
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+
+        <property name="driverClassName" value="${jdbc.driverClass}"/>
+        <!-- 基本属性 url、user、password -->
+        <property name="url" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+
+        <property name="filters" value="${jdbc.pool.druid.filters}"/>
+
+        <!-- 配置：最大、初始化、最小空闲、最大空闲、获取连接最大等待时间-->
+        <!--#连接池最大使用连接数-->
+        <property name="maxActive" value="${jdbc.pool.druid.maxActive}"/>
+        <!--#初始化连接大小-->
+        <property name="initialSize" value="${jdbc.pool.druid.initialSize}"/>
+        <!--#连接池最小空闲-->
+        <property name="minIdle" value="${jdbc.pool.druid.minIdle}"/>
+        <!--#获取连接最大等待时间-->
+        <property name="maxWait" value="${jdbc.pool.druid.maxWait}"/>
+
+        <property name="timeBetweenEvictionRunsMillis" value="${jdbc.pool.druid.timeBetweenEvictionRunsMillis}"/>
+        <property name="minEvictableIdleTimeMillis" value="${jdbc.pool.druid.minEvictableIdleTimeMillis}"/>
+
+        <property name="validationQuery" value="${jdbc.pool.druid.validationQuery}"/>
+        <property name="testWhileIdle" value="${jdbc.pool.druid.testWhileIdle}"/>
+        <property name="testOnBorrow" value="${jdbc.pool.druid.testOnBorrow}"/>
+        <property name="testOnReturn" value="${jdbc.pool.druid.testOnReturn}"/>
+    </bean>
+
+</beans>
